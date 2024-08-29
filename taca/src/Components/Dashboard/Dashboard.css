@@ -30,6 +30,10 @@ body {
   min-height: 100vh;
   margin: 70px 50px;
 }
+.dname{
+  margin: 20px;
+  font-size: larger;
+}
 
 .table-create-btn {
   display: flex;

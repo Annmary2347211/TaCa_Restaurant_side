@@ -9,6 +9,15 @@
   cursor: pointer; /* Indicate that the card is clickable */
 }
 
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #090909;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
 /* .booking-list-container{
   margin:100px
 } */

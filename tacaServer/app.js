@@ -38,6 +38,7 @@ app.use('/api/auth', authRoutes);
 
 app.use('/api', apiRoutes);
 app.use('/api/food', menuRoutes);
+
 app.use('/api', restaurantRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', bookingRoutes);

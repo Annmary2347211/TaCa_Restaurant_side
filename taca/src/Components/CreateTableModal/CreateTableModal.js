@@ -13,6 +13,12 @@ const CreateTableModal = ({ onClose }) => {
     setTables([...tables, { tableNumber: '', chairs: '' }]);
   };
 
+  const handleRemoveRow = (index) => {
+    const newTables = [...tables];
+    newTables.splice(index, 1);
+    setTables(newTables);
+  };
+
   const handleChange = (index, event) => {
     const { name, value } = event.target;
     const newTables = [...tables];
@@ -23,22 +29,28 @@ const CreateTableModal = ({ onClose }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log('hiiii');
-      const response = await axios.post('/add-tables', {
-        restaurantId: restaurant._id,
-        tables,
-      },{
-        headers: { 'x-auth-token': localStorage.getItem('token')} 
-      });
+      const response = await axios.post(
+        '/add-tables',
+        {
+          restaurantId: restaurant._id,
+          tables,
+        },
+        {
+          headers: { 'x-auth-token': localStorage.getItem('token') },
+        }
+      );
       if (response.status === 200) {
         alert('Tables created successfully');
-        
+
         // Fetch the updated restaurant data
-        const updatedRestaurantResponse = await axios.get(`/restaurant/${restaurant.emailid}`,{
-          headers: { 'x-auth-token': localStorage.getItem('token')} 
-        });
+        const updatedRestaurantResponse = await axios.get(
+          `/restaurant/${restaurant.emailid}`,
+          {
+            headers: { 'x-auth-token': localStorage.getItem('token') },
+          }
+        );
         dispatch(setRestaurant(updatedRestaurantResponse.data)); // Update Redux store with new data
-        
+
         onClose(); // Close the modal
       }
     } catch (error) {
@@ -71,8 +83,21 @@ const CreateTableModal = ({ onClose }) => {
                 onChange={(event) => handleChange(index, event)}
                 required
               />
+              {tables.length > 1 && (
+                <button
+                  type="button"
+                  className="add-button"
+                  onClick={() => handleRemoveRow(index)}
+                >
+                  -
+                </button>
+              )}
               {index === tables.length - 1 && (
-                <button type="button" className="add-button" onClick={handleAddRow}>
+                <button
+                  type="button"
+                  className="add-button"
+                  onClick={handleAddRow}
+                >
                   +
                 </button>
               )}
