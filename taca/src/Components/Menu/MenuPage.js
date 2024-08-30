@@ -23,7 +23,7 @@ const MenuPage = () => {
   useEffect(() => {
     const fetchMenuData = async () => {
       try {
-        const response = await axios.get(`/food/menu/${restaurant._id}`);
+        const response = await axios.get(`/food/menu/${restaurant?._id}`);
         setFoodItems(response.data);
       } catch (error) {
         console.error('Failed to fetch menu data:', error);
@@ -31,7 +31,7 @@ const MenuPage = () => {
     };
 
     fetchMenuData();
-  }, [restaurant._id,editMode]);
+  }, [restaurant?._id,editMode]);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -78,7 +78,7 @@ const MenuPage = () => {
   
     const menuData = {
       ...formData,
-      resId: restaurant._id,
+      resId: restaurant?._id,
     };
   
     if (editMode) {

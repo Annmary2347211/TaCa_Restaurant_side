@@ -1,26 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from '../../axiosConfig'; // Ensure the correct path
 import { logout, setRestaurant } from '../../redux/restaurantSlice';
 import './Header.css';
 
+
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [activeLink, setActiveLink] = useState('home');
+  const location = useLocation();
+  const [activeLink, setActiveLink] = useState('dashboard');
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const token = localStorage.getItem('token');
-  const emailid = localStorage.getItem('emailid')
-  // const emailid = useSelector((state) => state.restaurant.restaurant?.emailid);
+  const emailid = localStorage.getItem('emailid');
 
   const fetchRestaurantData = async () => {
     try {
       if (emailid) {
-        const response = await axios.get(`/restaurant/${emailid}`,{
+        const response = await axios.get(`/restaurant/${emailid}`, {
           headers: { 'x-auth-token': localStorage.getItem('token')} 
         });
         console.log(response, "Fetched restaurant data");
@@ -34,11 +35,14 @@ const Header = () => {
   useEffect(() => {
     if (token) {
       fetchRestaurantData();
-    } else {
-      dispatch(logout()); // Ensure Redux state is cleared if no token
-      navigate('/login'); // Redirect to login if no token
-    }
+    } 
   }, [token, emailid, dispatch]);
+
+  // useEffect(() => {
+  //   // Set the active link based on the current path
+  //   const path = location.pathname.replace('/', '');
+  //   setActiveLink(path || 'dashboard'); // If the path is empty, default to 'home'
+  // }, [location]);
 
   const handleLinkClick = (link) => {
     setActiveLink(link);
@@ -69,8 +73,9 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('emailid');
     dispatch(logout());
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -80,37 +85,23 @@ const Header = () => {
         <span>TaCa</span>
       </div>
       <nav className={`nav ${isMenuOpen ? 'open' : ''}`}>
-        <ul>
-          {['home', 'profile', 'menu', 'reservations', 'reviews'].map((link) => (
-            <li key={link}>
-              <button
-                className={`nav-link ${activeLink === link ? 'active' : ''}`}
-                onClick={() => handleLinkClick(link)}
-              >
-                {link.charAt(0).toUpperCase() + link.slice(1)}
-              </button>
-            </li>
-          ))}
-          {isMenuOpen && (
-            <>
-              {!token ? (
-                <>
-                  <li>
-                    <button className="nav-link" onClick={() => handleLinkClick('register')}>New Registration</button>
-                  </li>
-                  <li>
-                    <button className="nav-link" onClick={() => handleLinkClick('login')}>Login</button>
-                  </li>
-                </>
-              ) : (
-                <li>
-                  <button className="nav-link" onClick={handleLogout}>Logout</button>
-                </li>
-              )}
-            </>
-          )}
-        </ul>
-      </nav>
+  <ul>
+    {token && (
+      <>
+        {['dashboard', 'profile', 'menu', 'reservations', 'reviews'].map((link) => (
+          <li key={link}>
+            <button
+              className={`nav-link ${activeLink === link ? 'active' : ''}`}
+              onClick={() => handleLinkClick(link)}
+            >
+              {link.charAt(0).toUpperCase() + link.slice(1)}
+            </button>
+          </li>
+        ))}
+      </>
+    )}
+  </ul>
+</nav>
       <div className="button-group">
         {!token ? (
           <>

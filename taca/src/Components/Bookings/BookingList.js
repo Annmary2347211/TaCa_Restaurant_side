@@ -14,7 +14,7 @@ const BookingList = () => {
   useEffect(() => {
     const fetchReservations = async () => {
       try {
-        const response = await axios.get(`/bookings/${restaurant._id}`); // Replace with your actual API endpoint
+        const response = await axios.get(`/bookings/${restaurant?._id}`); // Replace with your actual API endpoint
         setReservations(response.data);
         setFilteredReservations(response.data); // Initially set filtered reservations to all reservations
         setLoading(false);
@@ -25,7 +25,7 @@ const BookingList = () => {
     };
 
     fetchReservations();
-  }, [restaurant._id]);
+  }, [restaurant?._id]);
 
   const handleSearchChange = (e) => {
     const query = e.target.value.toLowerCase();

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 console.log('kkkkk')
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/api', // Adjust this to your backend's base URL
+  baseURL: 'http://192.168.1.8:5000/api', // Adjust this to your backend's base URL
   headers: {
     'Content-Type': 'application/json',
   },
